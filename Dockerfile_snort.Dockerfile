@@ -61,8 +61,8 @@ RUN mkdir -p /var/log/snort
 COPY etc/ ${INSTALLPATH}/etc/snort/
 RUN apt-get -y install iptables ethtool
 # Clean up APT when done.
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    /opt/v${SNORT_VERSION}.tar.gz /opt/v${DAQ_VERSION}.tar.gz
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Specify the working directory
 WORKDIR /tmp
