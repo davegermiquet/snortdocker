@@ -7,3 +7,5 @@ iptable_filter         12288  0
 ip_tables              32768  1 iptable_filter
 [root@localhost daveinspect]#
 
+Template was some what modified by this person:
+https://github.com/jgru/docker-snort3
