@@ -1,3 +1,5 @@
+Tested on Rocky 9.5 (with selinux in permissive)
+
 Modules needed on host system are the following to get this to work:
 [root@localhost daveinspect]# lsmod | grep nft_queue
 nft_queue              12288  0
