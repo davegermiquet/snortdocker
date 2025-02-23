@@ -9,5 +9,10 @@ iptable_filter         12288  0
 ip_tables              32768  1 iptable_filter
 [root@localhost daveinspect]#
 
+to enable this modules do the following:
+
+# modprobe iptable_filter
+# modprobe nft_queue
+
 Template was some what modified by this person:
 https://github.com/jgru/docker-snort3
