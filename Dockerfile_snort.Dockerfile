@@ -1,6 +1,6 @@
 FROM debian:bookworm-slim
 
-MAINTAINER jgru
+MAINTAINER dgermiquet
 
 RUN apt-get update && \
     apt-get install -y \
