@@ -42,14 +42,12 @@ RUN git clone --depth 1 --branch v3.0.18 https://github.com/snort3/libdaq.git li
 # Set version variables for DAQ and Snort
 # Copy the downloaded tarballs into the Docker image
 
-# ENV DAQ_VERSION 3.0.8
 RUN    cd libdaq \
     && autoreconf -vif; ./configure; make; make install
 
 ENV INSTALLPATH /
 RUN export my_path=${INSTALLPATH}
 
-# ENV SNORT_VERSION 3.1.40.0
 RUN    cd snort \
     && ./configure_cmake.sh --prefix=${INSTALLPATH} \
     && cd build \
