@@ -1,1 +1,2 @@
 alert icmp  any any -> [ 192.168.56.12/32 ]  any (msg:"ICMP traffic detected"; sid:1000003;) 
+alert tcp  any any -> any  any (msg:"TCP traffic detected"; sid:1000004;) 

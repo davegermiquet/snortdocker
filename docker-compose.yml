@@ -1,4 +1,22 @@
 services:
+  cowrie:
+    build:
+      context: .
+      dockerfile: Dockerfile_cowrie-with-tcpdump.Dockerfile
+    ports:
+      - 24:2222
+      - 25:2223
+    command: >
+      /bin/bash -c "ip route add 192.168.55.0/24 dev eth0 via 192.168.56.11;\ 
+      sudo -u cowrie bash -c \"export COWRIE_TELNET_ENABLED=yes;export PYTHONPATH=/cowrie/cowrie-git/src;cd /cowrie/cowrie-git;/cowrie/cowrie-env/bin/python3 /cowrie/cowrie-env/bin/twistd -n --umask=0022 --pidfile= cowrie\"" 
+    networks:
+      snort2:
+        ipv4_address: 192.168.56.13
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    privileged: true
+
   snort1:
     build:
       context: .
