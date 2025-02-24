@@ -21,7 +21,7 @@
 
 -- HOME_NET and EXTERNAL_NET must be set now
 -- setup the network addresses you are protecting
-HOME_NET = '[192.168.56.10/32 ]'
+HOME_NET = '[192.168.56.0/24 ]'
 
 -- set up the external network addresses.
 -- (leave as "any" in most situations)
