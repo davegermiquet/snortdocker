@@ -14,13 +14,39 @@ nf_tables             356352  858 nft_queue,nft_ct,nft_compat,nft_reject_inet,nf
 iptable_filter         12288  0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
 ip_tables              32768  1 iptable_filter
 [root@localhost daveinspect]#
+How to run:
+
+docker compose up -d
+
+How to test:
+docker compose exec snort1 /bin/bash
+ping 192.168.56.10 (REJECT)
+ping 192.168.56.11 (NO LOG)
+ping 192.168.56.12 (LOG)
+apt-get upgrade
+apt-get install telnet
+telnet 192.168.56.13 2223 (REJECT)
+telnet 192.168.56.13 2222 (PASS)
 
 to enable this modules do the following:
 
 # modprobe iptable_filter
 # modprobe nft_queue
 
-Template was some what modified by this person:
+Template was some what modified by this person:How to run:
+
+docker compose up -d
+
+How to test:
+docker compose exec snort1 /bin/bash
+ping 192.168.56.10 (REJECT)
+ping 192.168.56.11 (NO LOG)
+ping 192.168.56.12 (LOG)
+apt-get upgrade
+apt-get install telnet
+telnet 192.168.56.13 2223 (REJECT)
+telnet 192.168.56.13 2222 (PASS)
+
 https://github.com/jgru/docker-snort3
 
 
@@ -36,4 +62,4 @@ ping 192.168.56.12 (LOG)
 apt-get upgrade
 apt-get install telnet
 telnet 192.168.56.13 2223 (REJECT)
-telnet 192.168.56.13 2222 (PASS)
+telnet 192.168.56.13 2222 (ALERT)
