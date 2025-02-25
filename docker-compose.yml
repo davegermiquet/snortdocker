@@ -3,70 +3,75 @@ services:
     build:
       context: .
       dockerfile: Dockerfile_cowrie-with-tcpdump.Dockerfile
-    ports:
-      - 2222
-      - 2223
     command: >
-      /bin/bash -c "ip route add 192.168.55.0/24 dev eth0 via 192.168.56.11;\ 
+      /bin/bash -c "ip route add $NETMASK1 dev $INTERFACE via $GATEWAYIP2;\ 
       sudo -u cowrie bash -c \"export COWRIE_TELNET_ENABLED=yes;export PYTHONPATH=/cowrie/cowrie-git/src;cd /cowrie/cowrie-git;/cowrie/cowrie-env/bin/python3 /cowrie/cowrie-env/bin/twistd -n --umask=0022 --pidfile= cowrie\"" 
     networks:
       snort2:
-        ipv4_address: 192.168.56.13
+        ipv4_address: ${PREFIX2}.13
+    depends_on:
+      - snort3
     cap_add:
       - NET_ADMIN
       - NET_RAW
     privileged: true
-
+    env_file:
+      - .dockerenv
   snort1:
     build:
       context: .
       dockerfile: Dockerfile_snort.Dockerfile
     networks:
       snort1:
-        ipv4_address: 192.168.55.10
     cap_add:
       - NET_ADMIN
     command: >
-      sh -c "ip route add 192.168.56.0/24 dev eth0 via 192.168.55.11; sleep 100000"
+      sh -c "ip route add $NETMASK2 dev $INTERFACE via $GATEWAYIP1; sleep 100000"
+    depends_on:
+      - snort3
   snort2:
     build:
       context: .
       dockerfile: Dockerfile_snort.Dockerfile
     networks:
       snort2:
-        ipv4_address: 192.168.56.10
+        ipv4_address: ${PREFIX2}.10
     cap_add:
       - NET_ADMIN
     command: >
-      sh -c "ip route add 192.168.55.0/24 dev eth0 via 192.168.56.11; sleep 100000"
+      sh -c "ip route add $NETMASK1 dev $INTERFACE via $GATEWAYIP2; sleep 100000"
+    depends_on:
+      - snort3
   snort4:
     build:
       context: .
       dockerfile: Dockerfile_snort.Dockerfile
     networks:
       snort2:
-        ipv4_address: 192.168.56.12
+        ipv4_address: ${PREFIX2}.12
     cap_add:
       - NET_ADMIN
     command: >
-      sh -c "ip route add 192.168.55.0/24 dev eth0 via 192.168.56.11; sleep 100000"
+      sh -c "ip route add $NETMASK1 dev $INTERFACE via $GATEWAYIP2; sleep 100000"
+    depends_on:
+      - snort3
   snort3:
     build:
       context: .
       dockerfile: Dockerfile_snort.Dockerfile
     networks:
       snort2:
-        ipv4_address: 192.168.56.11
+        ipv4_address: $GATEWAYIP2
       snort1:
-        ipv4_address: 192.168.55.11
+        ipv4_address: $GATEWAYIP1
     privileged: true
     cap_add:
       - NET_ADMIN
       - NET_RAW
     command: >
       sh -c "snort -Q -k none --daq nfq --daq-var device=ip  --daq-var proto=ip4 --daq-var queue=0 -c /etc/snort/snort.lua -R /etc/snort/rules/local.rules & \ 
-      sleeo 3 ;\
-      ip link set dev eth0 promisc on;\
+      sleep 3 ;\
+      ip link set dev $INTERFACE promisc on;\
       iptables -I FORWARD -j NFQUEUE --queue-bypass ;  \
       iptables -I INPUT -j NFQUEUE  --queue-bypass; \
       iptables -I OUTPUT -j NFQUEUE --queue-bypass; touch /tmp/alert_fast.txt;tail -f /tmp/alert_fast.txt"
@@ -76,12 +81,10 @@ networks:
     enable_ipv6: false
     ipam:
       config:
-        - subnet: 192.168.55.0/24
-          gateway: 192.168.55.1
+        - subnet: $NETMASK1
   snort2:
     driver: bridge
     enable_ipv6: false
     ipam:
       config:
-        - subnet: 192.168.56.0/24
-          gateway: 192.168.56.1
+        - subnet: $NETMASK2
