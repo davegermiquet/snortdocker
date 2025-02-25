@@ -20,6 +20,9 @@ to enable this modules do the following:
 Template was some what modified by this person:
 https://github.com/jgru/docker-snort3
 
+the container "snort3" is the snort system.
+(docker compose logs snort3)
+
 
 How to run:
 
