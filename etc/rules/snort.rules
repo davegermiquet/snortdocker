@@ -1,5 +1,6 @@
 alert icmp  any any -> [ 192.168.56.12/32 ]  any (msg:"ICMP traffic detected"; sid:1000003;) 
-alert tcp any any -> any any  (msg: "Connection to remote IP on port 2223"; sid:1000005; rev:1;)
+alert tcp any any -> any 2222  (msg: "Connection to remote IP on port 2222"; sid:1000005; rev:1;)
+reject tcp any any  -> any 2223  (msg: "Connection to remote IP on port 2223"; sid:1000007; rev:1;)
 alert tcp any any -> any 4444 (msg: "Connection to remote IP on port 4444"; sid:1000006; rev:1;)
 
 

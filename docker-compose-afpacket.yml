@@ -3,9 +3,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile_cowrie-with-tcpdump.Dockerfile
-    ports:
-      - 2222
-      - 2223
     command: >
       /bin/bash -c "ip route add 192.168.55.0/24 dev eth0 via 192.168.56.11;\ 
       sudo -u cowrie bash -c \"export COWRIE_TELNET_ENABLED=yes;export PYTHONPATH=/cowrie/cowrie-git/src;cd /cowrie/cowrie-git;/cowrie/cowrie-env/bin/python3 /cowrie/cowrie-env/bin/twistd -n --umask=0022 --pidfile= cowrie\"" 
@@ -64,9 +61,8 @@ services:
       - NET_ADMIN
       - NET_RAW
     command: >
-      sh -c "snort -Q -k none --daq nfq --daq-var device=ip  --daq-var proto=ip4 --daq-var queue=0 -c /etc/snort/snort.lua -R /etc/snort/rules/local.rules & \ 
-      sleeo 3 ;\
-      ip link set dev eth0 promisc on;\
+      sh -c "snort --daq afpacket --daq-mode inline -Q -c /etc/snort/snort.lua -R /etc/snort/rules/snort3-community.rules -i eth0:eth1 --daq-var fanout_type=hash & \
+      ip link set dev eth1 promisc on; \
       iptables -I FORWARD -j NFQUEUE --queue-bypass ;  \
       iptables -I INPUT -j NFQUEUE  --queue-bypass; \
       iptables -I OUTPUT -j NFQUEUE --queue-bypass; touch /tmp/alert_fast.txt;tail -f /tmp/alert_fast.txt"
