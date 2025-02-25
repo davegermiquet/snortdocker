@@ -1,3 +1,7 @@
+These configuration and docker files allow you to run snort, block ports, and accept ports test rules, before moving into production.
+(You can see how network responds within docker)
+
+
 Tested on Rocky 9.5 (with selinux in permissive)
 Tested on UBUNTU 22.04 
 
