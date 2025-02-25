@@ -1,4 +1,6 @@
 Tested on Rocky 9.5 (with selinux in permissive)
+Tested on UBUNTU 22.04 
+
 
 Modules needed on host system are the following to get this to work:
 [root@localhost daveinspect]# lsmod | grep nft_queue
