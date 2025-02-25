@@ -1,3 +1,6 @@
+This branch allows modifications to the network addresses by modifying the ENVIRONMENT .dockerenv file.
+
+
 Tested on Rocky 9.5 (with selinux in permissive)
 
 Modules needed on host system are the following to get this to work:
@@ -16,3 +19,18 @@ to enable this modules do the following:
 
 Template was some what modified by this person:
 https://github.com/jgru/docker-snort3
+
+
+How to run:
+
+docker compose --env-file .dockerenv up -d
+
+How to test:
+docker compose exec snort1 /bin/bash
+ping 192.168.56.10 (REJECT)
+ping 192.168.56.11 (NO LOG)
+ping 192.168.56.12 (LOG)
+apt-get upgrade
+apt-get install telnet
+telnet 192.168.56.13 2223 (REJECT)
+telnet 192.168.56.13 2222 (PASS)
